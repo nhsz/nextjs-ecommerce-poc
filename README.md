@@ -12,8 +12,8 @@
 
 ```json
 {
-  "name": "Samurai King Restling",
-  "category": "landmarks",
+  "name": "Person Posing Near Body of Water",
+  "category": "fashion",
   "price": 101,
   "currency": "USD",
   "image": {
