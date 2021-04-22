@@ -15,8 +15,8 @@ export interface ProductData extends Fields {
 }
 
 interface ProductImage {
-  alt: number;
   src: string;
+  alt: string;
 }
 
 interface ProductDetails {
