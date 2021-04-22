@@ -3,15 +3,41 @@ import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { FC } from 'react';
-import { ProductData } from '../components';
+import { Fields, ProductData } from '../components';
 
 export const getStaticProps: GetStaticProps = async () => {
   const client = createClient({
     space: process.env.CONTENTFUL_SPACE_ID ?? '',
     accessToken: process.env.CONTENTFUL_ACCESS_TOKEN ?? ''
   });
-  const results = await client.getEntries({ content_type: 'product' });
-  const products = results.items.map(result => result.fields);
+  const results = await client.getEntries<Fields>({ content_type: 'product' });
+  const products: ProductData[] = results.items.map(result => {
+    const { id } = result.sys;
+    const {
+      name,
+      slug,
+      category,
+      price,
+      currency,
+      image,
+      bestseller,
+      featured,
+      details
+    } = result.fields;
+
+    return {
+      id,
+      name,
+      slug,
+      category,
+      price,
+      currency,
+      image,
+      bestseller,
+      featured,
+      details
+    };
+  });
 
   return {
     props: {
