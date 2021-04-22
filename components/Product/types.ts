@@ -1,4 +1,4 @@
-export interface ProductData {
+export interface Fields {
   name: string;
   slug: string;
   category: string;
@@ -8,6 +8,10 @@ export interface ProductData {
   bestseller: boolean;
   featured: boolean;
   details: ProductDetails;
+}
+
+export interface ProductData extends Fields {
+  id: string;
 }
 
 interface ProductImage {
