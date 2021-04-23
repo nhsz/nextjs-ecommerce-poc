@@ -70,7 +70,12 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
           <Divider border='none' height='4px' backgroundColor='#E4E4E4' />
         </Stack>
 
-        <Stack spacing={10} mt={{ base: 0, md: 6 }} px={{ base: 6, md: 16 }}>
+        <Stack
+          spacing={10}
+          mt={{ base: 0, md: 6 }}
+          px={{ base: 6, md: 16 }}
+          mb={{ base: 8, md: 16 }}
+        >
           <Flex
             mt={6}
             direction={{ base: 'column', md: 'row' }}
@@ -236,15 +241,16 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
             </Heading>
 
             <Box display={{ base: 'none', md: 'block' }}>
-              <Text fontWeight='400' color='#9B9B9B' display='inline-block' mr={1}>
+              <Text fontWeight='400' color='#9B9B9B' display='inline-block'>
                 Sort by
               </Text>
 
-              <Text fontWeight='400' display='inline-block'>
-                Price
-              </Text>
+              <select>
+                <option value='0'>Alphabetically</option>
+                <option value='1'>Price</option>
+              </select>
             </Box>
-            <Box display={{ base: 'block', md: 'none' }}>
+            <Box display={{ base: 'block', md: 'none' }} cursor='pointer'>
               <Image src='/filters.svg' alt='Open filters' width={20} height={20} />
             </Box>
           </Flex>
