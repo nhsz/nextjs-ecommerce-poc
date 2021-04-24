@@ -1,4 +1,15 @@
-import { Box, Button, Divider, Flex, Grid, Heading, Stack, Text, Wrap } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  Heading,
+  Image as ChakraImage,
+  Stack,
+  Text,
+  Wrap
+} from '@chakra-ui/react';
 import { createClient } from 'contentful';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
@@ -94,7 +105,14 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
 
             <Stack mb={2} order={{ base: 1, md: 2 }} w='100%'>
               <Stack h={{ base: 60, md: 96 }} position='relative' mb={2}>
-                <Image src={src} alt={alt} height={height} width={'auto'} objectFit='cover' />
+                <Image
+                  src={src}
+                  alt={alt}
+                  height={height}
+                  width={'auto'}
+                  objectFit='cover'
+                  priority={true}
+                />
 
                 <Box
                   position='absolute'
@@ -228,10 +246,15 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
           <Divider border='none' height='4px' backgroundColor='#E4E4E4' />
         </Stack>
 
-        <Stack spacing={10} mt={{ base: 0, md: 6 }} px={{ base: 6, md: 16 }}>
-          <Flex mt={6} direction='row' justifyContent='space-between'>
-            <Heading as='h3' fontSize={{ base: 'sm', md: 'md' }} mb={8}>
-              <Text fontWeight='700' display='inline-block' mr={1}>
+        <Stack
+          spacing={10}
+          mt={{ base: 0, md: 6 }}
+          px={{ base: 6, md: 16 }}
+          mb={{ base: 6, md: 16 }}
+        >
+          <Flex mt={6} direction='row' justifyContent='space-between' alignItems='center'>
+            <Heading as='h3' fontSize={{ base: 'sm', md: 'md' }} height={6}>
+              <Text fontWeight='700' display='inline-block' mr={1} mb={8}>
                 Photography /
               </Text>
 
@@ -240,21 +263,60 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
               </Text>
             </Heading>
 
+            <Box display={{ base: 'block', md: 'none' }} cursor='pointer'>
+              <ChakraImage src='/filters.svg' alt='Open filters' width={6} height={6} />
+            </Box>
+
             <Box display={{ base: 'none', md: 'block' }}>
-              <Text fontWeight='400' color='#9B9B9B' display='inline-block'>
-                Sort by
-              </Text>
+              <span>
+                <ChakraImage
+                  display='inline-block'
+                  mr={2}
+                  src='/sort-arrows.svg'
+                  alt='Change sorting order'
+                  width={3}
+                  height={'auto'}
+                />
+                <Text fontWeight='400' color='#9B9B9B' display='inline-block'>
+                  Sort by
+                </Text>
+              </span>
 
               <select>
                 <option value='0'>Alphabetically</option>
                 <option value='1'>Price</option>
               </select>
             </Box>
-            <Box display={{ base: 'block', md: 'none' }} cursor='pointer'>
-              <Image src='/filters.svg' alt='Open filters' width={20} height={20} />
-            </Box>
           </Flex>
         </Stack>
+
+        <Flex justify='space-between'>
+          <Stack display={{ base: 'none', md: 'block' }}>
+            <p>FILTERS</p>
+          </Stack>
+
+          <Stack px={{ base: 6, md: 16 }} alignItems='center' maxW='960px' flex={1}>
+            <Grid
+              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+              gap={{ base: 6, md: 8 }}
+              mb={{ base: 6, md: 12 }}
+            >
+              {products.map(product => {
+                return (
+                  <Box key={product.id} position='relative'>
+                    <Image
+                      src={product.image.src}
+                      alt={product.image.alt}
+                      height='400px'
+                      width='280px'
+                      objectFit='cover'
+                    />
+                  </Box>
+                );
+              })}
+            </Grid>
+          </Stack>
+        </Flex>
       </main>
     </div>
   );
