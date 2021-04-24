@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Divider,
   Flex,
   Grid,
@@ -14,7 +16,7 @@ import { createClient } from 'contentful';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Fields, ProductData } from '../components';
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -63,8 +65,10 @@ interface Products {
 }
 
 export const Home: FC<Products> = ({ products }): JSX.Element => {
+  const [cartIsOpen, setCartIsOpen] = useState(true);
+
   const featuredProduct = products.filter(product => product.featured)[0];
-  const { name, category, details } = featuredProduct;
+  const { name, price, category, details } = featuredProduct;
   const { src, alt } = featuredProduct.image;
   const { height, width } = featuredProduct.details.dimensions;
   const { size } = featuredProduct.details;
@@ -77,8 +81,64 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
       </Head>
 
       <main>
-        <Stack px={{ base: 0, md: 16 }}>
-          <Divider border='none' height='4px' backgroundColor='#E4E4E4' />
+        <Stack px={{ base: 0, md: 16 }} position='relative'>
+          <Stack>
+            <Divider border='none' height='4px' backgroundColor='#E4E4E4' />
+          </Stack>
+
+          {cartIsOpen && (
+            <Box
+              border='4px solid #E4E4E4'
+              backgroundColor='#fff'
+              position='absolute'
+              top={-2}
+              right={16}
+              w={'auto'}
+              minW={96}
+              zIndex={9999}
+              p={4}
+            >
+              <Stack>
+                <Flex justifyContent='flex-end' mb={-4}>
+                  <Box cursor='pointer' onClick={() => setCartIsOpen(false)}>
+                    <Image src='/close.svg' alt='Close cart' width={20} height={20} />
+                  </Box>
+                </Flex>
+
+                <Flex justifyContent='space-between' alignItems='center'>
+                  <Stack mr={4} flex={2 / 3}>
+                    <Text fontSize='lg' fontWeight='700' maxW={72}>
+                      {name}
+                    </Text>
+
+                    <Text fontSize='3xl' fontWeight='400' color='#656565'>
+                      ${price}
+                    </Text>
+                  </Stack>
+
+                  <Stack flex={1 / 3}>
+                    <Image src={src} alt={alt} height={'auto'} width={'100%'} objectFit='contain' />
+                  </Stack>
+                </Flex>
+
+                <Stack>
+                  <Divider w='100%' mb={4} />
+                </Stack>
+
+                <Button
+                  color='#000'
+                  backgroundColor='#fff'
+                  border='2px'
+                  borderColor='#000'
+                  variant='primary-btn'
+                  _hover={{ color: '#fff', bg: '#000' }}
+                  order={{ base: 2, md: 1 }}
+                >
+                  CLEAR
+                </Button>
+              </Stack>
+            </Box>
+          )}
         </Stack>
 
         <Stack
@@ -97,7 +157,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
               {name}
             </Heading>
 
-            <Stack order={{ base: 2, md: 1 }} mt={{ base: 3, md: 0 }}>
+            <Stack order={{ base: 2, md: 1 }} mt={{ base: 3, md: 0 }} mb={{ md: 4 }}>
               <Button variant='primary-btn' _hover={{ bg: 'gray.700' }} order={{ base: 2, md: 1 }}>
                 ADD TO CART
               </Button>
@@ -247,13 +307,13 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
         </Stack>
 
         <Stack
-          spacing={10}
-          mt={{ base: 0, md: 6 }}
           px={{ base: 6, md: 16 }}
+          mt={{ base: 0, md: 6 }}
           mb={{ base: 6, md: 16 }}
+          spacing={10}
         >
           <Flex mt={6} direction='row' justifyContent='space-between' alignItems='center'>
-            <Heading as='h3' fontSize={{ base: 'sm', md: 'md' }} height={6}>
+            <Heading as='h3' fontSize={{ base: 'md', md: 'lg' }} height={6}>
               <Text fontWeight='700' display='inline-block' mr={1} mb={8}>
                 Photography /
               </Text>
@@ -269,14 +329,17 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
 
             <Box display={{ base: 'none', md: 'block' }}>
               <span>
-                <ChakraImage
-                  display='inline-block'
-                  mr={2}
-                  src='/sort-arrows.svg'
-                  alt='Change sorting order'
-                  width={3}
-                  height={'auto'}
-                />
+                <Box display='inline'>
+                  <ChakraImage
+                    display='inline-block'
+                    mr={2}
+                    src='/sort-arrows.svg'
+                    alt='Change sorting order'
+                    width={3}
+                    height={'auto'}
+                    cursor='pointer'
+                  />
+                </Box>
                 <Text fontWeight='400' color='#9B9B9B' display='inline-block'>
                   Sort by
                 </Text>
@@ -290,33 +353,129 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
           </Flex>
         </Stack>
 
-        <Flex justify='space-between'>
-          <Stack display={{ base: 'none', md: 'block' }}>
-            <p>FILTERS</p>
-          </Stack>
+        <Stack px={{ base: 6, md: 16 }}>
+          <Flex direction='row' justify='space-between'>
+            <Stack display={{ base: 'none', md: 'block' }} mr={8}>
+              <Stack mb={6}>
+                <Heading as='h4' fontSize={{ base: 'sm', md: 'md' }} mb={8}>
+                  Category
+                </Heading>
 
-          <Stack px={{ base: 6, md: 16 }} alignItems='center' maxW='960px' flex={1}>
-            <Grid
-              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
-              gap={{ base: 6, md: 8 }}
-              mb={{ base: 6, md: 12 }}
-            >
-              {products.map(product => {
-                return (
-                  <Box key={product.id} position='relative'>
-                    <Image
-                      src={product.image.src}
-                      alt={product.image.alt}
-                      height='400px'
-                      width='280px'
-                      objectFit='cover'
-                    />
-                  </Box>
-                );
-              })}
-            </Grid>
-          </Stack>
-        </Flex>
+                <CheckboxGroup colorScheme='gray'>
+                  <Stack>
+                    <Checkbox value='Fashion'>Fashion</Checkbox>
+                    <Checkbox value='Food'>Food</Checkbox>
+                    <Checkbox value='Lifestyle'>Lifestyle</Checkbox>
+                    <Checkbox value='Nature'>Nature</Checkbox>
+                    <Checkbox value='Summer'>Summer</Checkbox>
+                    <Checkbox value='Travel'>Travel</Checkbox>
+                    <Checkbox value='Winter'>Winter</Checkbox>
+                  </Stack>
+                </CheckboxGroup>
+              </Stack>
+
+              <Stack>
+                <Divider w={48} mb={4} />
+              </Stack>
+
+              <Stack>
+                <Heading as='h4' fontSize={{ base: 'sm', md: 'md' }} mb={8}>
+                  Price range
+                </Heading>
+
+                <CheckboxGroup colorScheme='gray'>
+                  <Stack>
+                    <Checkbox value='<20'>Lower than $20</Checkbox>
+                    <Checkbox value='20-100'>$20 - $100</Checkbox>
+                    <Checkbox value='100-200'>$100 - $200</Checkbox>
+                    <Checkbox value='>200'>More than $200</Checkbox>
+                  </Stack>
+                </CheckboxGroup>
+              </Stack>
+            </Stack>
+
+            <Stack alignItems='center' maxW={{ md: '976px' }} flex={1}>
+              <Grid
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  md: 'repeat(2, 1fr)',
+                  xl: 'repeat(3, 1fr)'
+                }}
+                gap={{ base: 8, md: 8 }}
+                mb={{ base: 6, md: 12 }}
+              >
+                {products.map(product => {
+                  return (
+                    <Box key={product.id}>
+                      <Box position='relative' height='400px' role='group' mb={1}>
+                        <Stack>
+                          <Image
+                            src={product.image.src}
+                            alt={product.image.alt}
+                            height='400px'
+                            width='auto'
+                            objectFit='cover'
+                          />
+                        </Stack>
+
+                        {product.bestseller && (
+                          <Box position='absolute' top={0}>
+                            <Text
+                              color='#000'
+                              backgroundColor='#fff'
+                              size='sm'
+                              px={4}
+                              py={1}
+                              textAlign='center'
+                            >
+                              Bestseller
+                            </Text>
+                          </Box>
+                        )}
+
+                        <Box
+                          position='absolute'
+                          bottom={0}
+                          w='100%'
+                          opacity={0}
+                          pointerEvents='none'
+                          _groupHover={{ opacity: 1, pointerEvents: 'auto', cursor: 'pointer' }}
+                          transition='opacity 0.2s ease-in-out'
+                        >
+                          <Text
+                            color='#fff'
+                            backgroundColor='#000'
+                            fontWeight={500}
+                            py={2}
+                            textAlign='center'
+                          >
+                            ADD TO CART
+                          </Text>
+                        </Box>
+                      </Box>
+
+                      <Stack>
+                        <Stack mb={-2}>
+                          <Text fontSize='md' fontWeight='700' color='#656565' mb={-2}>
+                            {product.category}
+                          </Text>
+
+                          <Text fontSize='2xl' fontWeight='700' mb={-2}>
+                            {product.name}
+                          </Text>
+                        </Stack>
+
+                        <Text fontSize='2xl' color='#656565'>
+                          ${product.price}
+                        </Text>
+                      </Stack>
+                    </Box>
+                  );
+                })}
+              </Grid>
+            </Stack>
+          </Flex>
+        </Stack>
       </main>
     </div>
   );
