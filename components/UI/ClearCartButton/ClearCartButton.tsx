@@ -4,6 +4,7 @@ import { useCartStore } from '../../../store';
 
 const ClearCartButton: FC = () => {
   const clearCart = useCartStore(state => state.clearCart);
+  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
 
   return (
     <Button
@@ -15,7 +16,10 @@ const ClearCartButton: FC = () => {
       _hover={{ color: '#fff', bg: '#000' }}
       order={{ base: 2, md: 1 }}
       fontSize='lg'
-      onClick={clearCart}
+      onClick={() => {
+        clearCart();
+        setCartIsOpen(false);
+      }}
     >
       CLEAR
     </Button>
