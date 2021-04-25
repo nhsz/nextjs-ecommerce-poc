@@ -9,13 +9,17 @@ interface Props {
 
 const AddToCartButton: FC<Props> = ({ product }) => {
   const setCartProducts = useCartStore(state => state.setCartProducts);
+  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
 
   return (
     <Stack
       order={{ base: 2, md: 1 }}
       mt={{ base: 3, md: 0 }}
       mb={{ md: 4 }}
-      onClick={() => setCartProducts(product)}
+      onClick={() => {
+        setCartProducts(product);
+        setCartIsOpen(true);
+      }}
     >
       <Button variant='primary-btn' _hover={{ bg: 'gray.700' }} order={{ base: 2, md: 1 }}>
         ADD TO CART

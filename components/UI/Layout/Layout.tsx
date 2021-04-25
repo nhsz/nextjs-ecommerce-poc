@@ -23,7 +23,7 @@ const Layout: FC = ({ children }) => {
               </a>
             </Link>
 
-            <Box cursor='pointer' onClick={setCartIsOpen}>
+            <Box cursor='pointer' onClick={() => setCartIsOpen(true)}>
               <Box position='relative'>
                 <Image src='/cart.svg' alt='Cart icon' width={'auto'} height={8} />
 

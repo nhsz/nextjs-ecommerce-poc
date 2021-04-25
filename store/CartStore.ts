@@ -6,7 +6,7 @@ type CartStore = {
   cartProducts: CartProduct[];
   totalAmount: number;
   numberOfProducts: number;
-  setCartIsOpen: VoidFunction;
+  setCartIsOpen: (isOpen: boolean) => void;
   setCartProducts: (product: CartProduct) => void;
   clearCart: VoidFunction;
 };
@@ -16,7 +16,7 @@ const useCartStore = create<CartStore>(set => ({
   cartProducts: [],
   totalAmount: 0,
   numberOfProducts: 0,
-  setCartIsOpen: () => set(state => ({ ...state, cartIsOpen: !state.cartIsOpen })),
+  setCartIsOpen: (isOpen: boolean) => set(state => ({ ...state, cartIsOpen: isOpen })),
   setCartProducts: product => {
     set(state => {
       const alreadyAdded = state.cartProducts.some(entry => entry.name === product.name);

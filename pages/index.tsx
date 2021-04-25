@@ -42,6 +42,8 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
   const cartIsOpen = useCartStore(state => state.cartIsOpen);
 
   const featuredProduct = products.filter(product => product.featured)[0];
+  // if (!featuredProduct) featuredProduct = generateRandomFeatured(products);
+
   const { name, price, category, details } = featuredProduct;
   const { src, alt } = featuredProduct.image;
   const { height, width } = featuredProduct.details.dimensions;

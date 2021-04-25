@@ -9,6 +9,7 @@ interface Props {
 
 const Product: FC<Props> = ({ product }) => {
   const setCartProducts = useCartStore(state => state.setCartProducts);
+  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
   const { id, name, price, category, bestseller } = product;
   const { src, alt } = product.image;
 
@@ -35,7 +36,10 @@ const Product: FC<Props> = ({ product }) => {
           pointerEvents='none'
           _groupHover={{ opacity: 1, pointerEvents: 'auto', cursor: 'pointer' }}
           transition='opacity 0.2s ease-in-out'
-          onClick={() => setCartProducts({ name, price, src, alt })}
+          onClick={() => {
+            setCartProducts({ name, price, src, alt });
+            setCartIsOpen(true);
+          }}
         >
           <Text color='#fff' backgroundColor='#000' fontWeight={500} py={2} textAlign='center'>
             ADD TO CART
