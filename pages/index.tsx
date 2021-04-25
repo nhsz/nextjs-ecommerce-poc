@@ -2,7 +2,7 @@ import { Box, Divider, Flex, Grid, Heading, Image, Stack, Wrap } from '@chakra-u
 import { createClient } from 'contentful';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import {
   CategoryFilter,
   FeaturedDescription,
@@ -16,6 +16,7 @@ import {
 } from '../components';
 import { Fields, ProductData } from '../components/Product/types';
 import { AddToCartButton, PhotosHeading } from '../components/UI';
+import { useStore } from '../store';
 import { getProducts } from '../utils';
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -38,7 +39,7 @@ interface Products {
 }
 
 export const Home: FC<Products> = ({ products }): JSX.Element => {
-  const [cartIsOpen, setCartIsOpen] = useState(true);
+  const cartIsOpen = useStore(state => state.cartIsOpen);
 
   const featuredProduct = products.filter(product => product.featured)[0];
   const { name, price, category, details } = featuredProduct;
@@ -59,7 +60,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
             <Divider border='none' height='4px' backgroundColor='#E4E4E4' />
           </Stack>
 
-          {cartIsOpen && <ShoppingList info={{ name, price, src, alt, setCartIsOpen }} />}
+          {cartIsOpen && <ShoppingList info={{ name, price, src, alt }} />}
         </Stack>
 
         <Stack

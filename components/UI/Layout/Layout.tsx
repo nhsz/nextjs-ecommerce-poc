@@ -1,8 +1,11 @@
 import { Box, Flex, Image, Stack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { FC } from 'react';
+import { useStore } from '../../../store';
 
 const Layout: FC = ({ children }) => {
+  const setCartIsOpen = useStore(state => state.setCartIsOpen);
+
   return (
     <Stack>
       <Stack
@@ -19,7 +22,7 @@ const Layout: FC = ({ children }) => {
               </a>
             </Link>
 
-            <Box cursor='pointer'>
+            <Box cursor='pointer' onClick={() => setCartIsOpen()}>
               <Image src='/cart.svg' alt='Cart icon' width={'auto'} height={8} />
             </Box>
           </Flex>
