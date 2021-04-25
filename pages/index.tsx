@@ -16,7 +16,7 @@ import {
 } from '../components';
 import { Fields, ProductData } from '../components/Product/types';
 import { AddToCartButton, PhotosHeading } from '../components/UI';
-import { useStore } from '../store';
+import { useCartStore } from '../store';
 import { getProducts } from '../utils';
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -39,7 +39,7 @@ interface Products {
 }
 
 export const Home: FC<Products> = ({ products }): JSX.Element => {
-  const cartIsOpen = useStore(state => state.cartIsOpen);
+  const cartIsOpen = useCartStore(state => state.cartIsOpen);
 
   const featuredProduct = products.filter(product => product.featured)[0];
   const { name, price, category, details } = featuredProduct;
@@ -60,7 +60,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
             <Divider border='none' height='4px' backgroundColor='#E4E4E4' />
           </Stack>
 
-          {cartIsOpen && <ShoppingList info={{ name, price, src, alt }} />}
+          {cartIsOpen && <ShoppingList />}
         </Stack>
 
         <Stack
@@ -79,7 +79,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
               {name}
             </Heading>
 
-            <AddToCartButton />
+            <AddToCartButton product={{ name, price, src, alt }} />
 
             <Stack mb={2} order={{ base: 1, md: 2 }} w='100%'>
               <FeaturedImage info={{ src, alt, height }} />

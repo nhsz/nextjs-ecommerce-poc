@@ -1,7 +1,10 @@
 import { Button } from '@chakra-ui/react';
 import { FC } from 'react';
+import { useCartStore } from '../../../store';
 
 const ClearCartButton: FC = () => {
+  const clearCart = useCartStore(state => state.clearCart);
+
   return (
     <Button
       color='#000'
@@ -12,6 +15,7 @@ const ClearCartButton: FC = () => {
       _hover={{ color: '#fff', bg: '#000' }}
       order={{ base: 2, md: 1 }}
       fontSize='lg'
+      onClick={() => clearCart()}
     >
       CLEAR
     </Button>
