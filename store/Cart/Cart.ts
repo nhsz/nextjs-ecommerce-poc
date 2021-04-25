@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { CartProduct } from '../components';
+import { CartProduct } from '../../components';
 
 type CartStore = {
   cartIsOpen: boolean;

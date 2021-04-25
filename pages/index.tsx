@@ -17,7 +17,7 @@ import {
 import { Fields, ProductData } from '../components/Product/types';
 import { AddToCartButton, PhotosHeading } from '../components/UI';
 import { useCartStore } from '../store';
-import { getProducts } from '../utils';
+import { getFiltered, getProducts, removeDuplicatesFrom } from '../utils';
 
 export const getStaticProps: GetStaticProps = async () => {
   const client = createClient({
@@ -128,7 +128,9 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
         <Stack px={{ base: 6, md: 16 }}>
           <Flex direction='row' justify='space-between'>
             <Stack display={{ base: 'none', md: 'block' }} mr={8}>
-              <CategoryFilter />
+              <CategoryFilter
+                categories={removeDuplicatesFrom(products.map(p => p.category).sort())}
+              />
 
               <Stack>
                 <Divider w={48} mb={4} />
@@ -147,9 +149,11 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
                 gap={{ base: 10, md: 8 }}
                 mb={{ base: 6, md: 12 }}
               >
-                {products.map(product => {
-                  return <Product key={product.id} product={product} />;
-                })}
+                {getFiltered(products)
+                  .slice(0, 6)
+                  .map(product => {
+                    return <Product key={product.id} product={product} />;
+                  })}
               </Grid>
             </Stack>
           </Flex>

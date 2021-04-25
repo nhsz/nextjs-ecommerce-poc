@@ -1,7 +1,24 @@
 import { Checkbox, CheckboxGroup, Heading, Stack } from '@chakra-ui/react';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
+import { useFiltersStore } from '../../store';
 
-const CategoryFilter: FC = () => {
+interface Props {
+  categories: string[];
+}
+
+const CategoryFilter: FC<Props> = ({ categories }) => {
+  const [addFilter, removeFilter] = useFiltersStore(state => [state.addFilter, state.removeFilter]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const filter = e.target.value;
+
+    if (e.target.checked) {
+      addFilter(filter);
+    } else {
+      removeFilter(filter);
+    }
+  };
+
   return (
     <Stack mb={6}>
       <Heading as='h4' fontSize={{ base: 'sm', md: 'md' }} mb={8}>
@@ -9,14 +26,12 @@ const CategoryFilter: FC = () => {
       </Heading>
 
       <CheckboxGroup colorScheme='gray'>
-        <Stack>
-          <Checkbox value='Fashion'>Fashion</Checkbox>
-          <Checkbox value='Food'>Food</Checkbox>
-          <Checkbox value='Lifestyle'>Lifestyle</Checkbox>
-          <Checkbox value='Nature'>Nature</Checkbox>
-          <Checkbox value='Summer'>Summer</Checkbox>
-          <Checkbox value='Travel'>Travel</Checkbox>
-          <Checkbox value='Winter'>Winter</Checkbox>
+        <Stack onChange={handleChange}>
+          {categories.map(category => (
+            <Checkbox key={category} value={category}>
+              {category}
+            </Checkbox>
+          ))}
         </Stack>
       </CheckboxGroup>
     </Stack>
