@@ -15,7 +15,7 @@ const ClearCartButton: FC = () => {
       _hover={{ color: '#fff', bg: '#000' }}
       order={{ base: 2, md: 1 }}
       fontSize='lg'
-      onClick={() => clearCart()}
+      onClick={clearCart}
     >
       CLEAR
     </Button>

@@ -23,14 +23,13 @@ const ShoppingList: FC = () => {
       position='absolute'
       top={-2}
       right={16}
-      w={'auto'}
-      minW={96}
+      w={'420px'}
       zIndex={9999}
       p={4}
     >
       <Stack>
         <Flex justifyContent='flex-end' mb={-4}>
-          <Box cursor='pointer' onClick={() => setCartIsOpen()}>
+          <Box cursor='pointer' onClick={setCartIsOpen}>
             <Image src='/close.svg' alt='Close cart' width={20} height={20} />
           </Box>
         </Flex>
