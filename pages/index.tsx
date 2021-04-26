@@ -1,8 +1,8 @@
 import { Box, Divider, Flex, Grid, Heading, Image, Stack, Text, Wrap } from '@chakra-ui/react';
-import { createClient } from 'contentful';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import { FC } from 'react';
+import api from '../api';
 import {
   CategoryFilter,
   FeaturedDescription,
@@ -16,14 +16,12 @@ import {
 } from '../components';
 import { Fields, ProductData } from '../components/Product/types';
 import { AddToCartButton, PhotosHeading } from '../components/UI';
+import { useFilter } from '../hooks';
 import { useCartStore } from '../store';
-import { getFiltered, getProducts, removeDuplicatesFrom } from '../utils';
+import { getProducts, removeDuplicatesFrom } from '../utils';
 
 export const getStaticProps: GetStaticProps = async () => {
-  const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID ?? '',
-    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN ?? ''
-  });
+  const client = api.contentful.connect();
   const results = await client.getEntries<Fields>({ content_type: 'product' });
   const products: ProductData[] = getProducts(results);
 
@@ -40,9 +38,10 @@ interface Products {
 
 export const Home: FC<Products> = ({ products }): JSX.Element => {
   const cartIsOpen = useCartStore(state => state.cartIsOpen);
+  const filteredProducts = useFilter(products);
+  const totalProducts = filteredProducts.length;
   const featuredProduct = products.filter(product => product.featured)[0];
   // if (!featuredProduct) featuredProduct = generateRandomFeatured(products);
-  const totalProducts = getFiltered(products).length;
 
   const { name, price, category, details } = featuredProduct;
   const { src, alt } = featuredProduct.image;
@@ -149,11 +148,9 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
                 gap={{ base: 10, md: 8 }}
                 mb={{ base: 6, md: 12 }}
               >
-                {getFiltered(products)
-                  .slice(0, 6)
-                  .map(product => {
-                    return <Product key={product.id} product={product} />;
-                  })}
+                {filteredProducts.slice(0, 6).map(product => {
+                  return <Product key={product.id} product={product} />;
+                })}
               </Grid>
             </Stack>
 
