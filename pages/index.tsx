@@ -120,7 +120,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
             />
 
             <Stack mb={2} order={{ base: 1, md: 2 }} w='100%'>
-              <FeaturedImage info={{ src, alt, height }} />
+              <FeaturedImage info={{ src, alt, height: height / 2 }} />
             </Stack>
           </Flex>
 
