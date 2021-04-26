@@ -27,8 +27,8 @@ const ShoppingList: FC = () => {
       backgroundColor='#fff'
       position='absolute'
       top={-2}
-      right={16}
-      w={'420px'}
+      right={{ base: 0, md: 16 }}
+      w={{ base: '100%', md: '420px' }}
       zIndex={9999}
       p={4}
     >

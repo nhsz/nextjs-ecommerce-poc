@@ -49,4 +49,4 @@ Pagination is dynamic and only display when there's more than 1 page to show (6 
 
 ## Demo
 
-See it [live](#)
+See it [live](https://nextjs-ecommerce-poc.vercel.app/)
