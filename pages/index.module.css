@@ -1,0 +1,32 @@
+.container {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  color: #b4b4b4;
+  font-size: 1.5rem;
+}
+
+.container li {
+  padding-right: 1rem;
+}
+
+.active {
+  color: #000;
+  font-weight: 600;
+}
+
+.disabled {
+  opacity: 0;
+  pointer-events: none;
+  cursor: none;
+}
+
+.previous {
+  height: 1rem;
+  content: url('/previous.svg');
+}
+
+.next {
+  height: 1rem;
+  content: url('/next.svg');
+}

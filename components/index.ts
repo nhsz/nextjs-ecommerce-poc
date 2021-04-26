@@ -2,6 +2,7 @@ export * from './CategoryFilter';
 export * from './FeaturedDescription';
 export * from './FeaturedDetails';
 export * from './FeaturedImage';
+export * from './MobileFilters';
 export * from './PeopleAlsoBuy';
 export * from './PriceFilter';
 export * from './Product';

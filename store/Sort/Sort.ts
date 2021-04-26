@@ -5,6 +5,7 @@ type SortStore = {
   order: string;
   setType: (type: string) => void;
   setOrder: VoidFunction;
+  resetSort: VoidFunction;
 };
 
 const useSortStore = create<SortStore>(set => ({
@@ -12,7 +13,8 @@ const useSortStore = create<SortStore>(set => ({
   order: 'ascending',
   setType: type => set(state => ({ ...state, type })),
   setOrder: () =>
-    set(state => ({ ...state, order: state.order === 'ascending' ? 'descending' : 'ascending' }))
+    set(state => ({ ...state, order: state.order === 'ascending' ? 'descending' : 'ascending' })),
+  resetSort: () => set(state => ({ ...state, type: 'price', order: 'ascending' }))
 }));
 
 export { useSortStore };

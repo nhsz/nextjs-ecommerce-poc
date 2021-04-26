@@ -7,6 +7,7 @@ type FiltersStore = {
   addFilter: (filter: string) => void;
   removeFilter: (filter: string) => void;
   setPriceRange: (range: string) => void;
+  resetFilters: VoidFunction;
 };
 
 const useFiltersStore = create<FiltersStore>(set => ({
@@ -19,7 +20,8 @@ const useFiltersStore = create<FiltersStore>(set => ({
     })),
   removeFilter: filter =>
     set(state => ({ ...state, filters: state.filters.filter(f => f !== filter) })),
-  setPriceRange: range => set(state => ({ ...state, priceRange: range }))
+  setPriceRange: range => set(state => ({ ...state, priceRange: range })),
+  resetFilters: () => set(state => ({ ...state, filters: [], priceRange: '' }))
 }));
 
 export { useFiltersStore };

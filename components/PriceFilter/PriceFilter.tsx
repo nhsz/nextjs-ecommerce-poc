@@ -1,4 +1,4 @@
-import { Heading, Radio, RadioGroup, Stack } from '@chakra-ui/react';
+import { Heading, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useFiltersStore } from '../../store';
 import styles from './PriceFilter.module.css';
@@ -18,7 +18,7 @@ const PriceFilter: FC = () => {
 
   return (
     <Stack>
-      <Heading as='h4' fontSize={{ base: 'sm', md: 'md' }} mb={8}>
+      <Heading as='h4' fontSize={{ base: '2xl', md: 'md' }} mb={{ base: 2, md: 8 }}>
         Price range
       </Heading>
 
@@ -36,7 +36,7 @@ const PriceFilter: FC = () => {
                   backgroundColor: '#718096'
                 }}
               >
-                {text}
+                <Text fontSize={{ base: 'xl', md: 'md' }}>{text}</Text>
               </Radio>
             );
           })}

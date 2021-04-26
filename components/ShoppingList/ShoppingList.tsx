@@ -2,7 +2,7 @@ import { Box, Divider, Flex, Stack, Text } from '@chakra-ui/react';
 import Image from 'next/image';
 import { FC } from 'react';
 import { useCartStore } from '../../store';
-import { ClearCartButton } from '../UI';
+import { SecondaryButton } from '../UI';
 
 export interface CartProduct {
   name: string;
@@ -12,11 +12,14 @@ export interface CartProduct {
 }
 
 const ShoppingList: FC = () => {
-  const [setCartIsOpen, cartProducts, totalAmount] = useCartStore(state => [
+  const [setCartIsOpen, clearCart, cartProducts, totalAmount] = useCartStore(state => [
     state.setCartIsOpen,
+    state.clearCart,
     state.cartProducts,
     state.totalAmount
   ]);
+
+  const handleClick = () => setCartIsOpen(false);
 
   return (
     <Box
@@ -31,7 +34,7 @@ const ShoppingList: FC = () => {
     >
       <Stack>
         <Flex justifyContent='flex-end' mb={-4}>
-          <Box cursor='pointer' onClick={() => setCartIsOpen(false)}>
+          <Box cursor='pointer' onClick={handleClick}>
             <Image src='/close.svg' alt='Close cart' width={20} height={20} />
           </Box>
         </Flex>
@@ -79,7 +82,12 @@ const ShoppingList: FC = () => {
           <Divider w='100%' mb={4} />
         </Stack>
 
-        <ClearCartButton />
+        <SecondaryButton
+          handleClick={() => {
+            clearCart();
+            setCartIsOpen(false);
+          }}
+        />
       </Stack>
     </Box>
   );

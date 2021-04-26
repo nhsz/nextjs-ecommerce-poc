@@ -15,6 +15,11 @@ const Product: FC<Props> = ({ product }) => {
   const { id, name, price, category, bestseller } = product;
   const { src, alt } = product.image;
 
+  const handleClick = () => {
+    setCartProducts({ name, price, src, alt });
+    setCartIsOpen(true);
+  };
+
   return (
     <Box key={id} mb={{ base: 6, md: 2 }}>
       <Box position='relative' height='400px' role='group' mb={1}>
@@ -38,10 +43,7 @@ const Product: FC<Props> = ({ product }) => {
           pointerEvents='none'
           _groupHover={{ opacity: 1, pointerEvents: 'auto', cursor: 'pointer' }}
           transition='opacity 0.2s ease-in-out'
-          onClick={() => {
-            setCartProducts({ name, price, src, alt });
-            setCartIsOpen(true);
-          }}
+          onClick={handleClick}
         >
           <Text color='#fff' backgroundColor='#000' fontWeight={500} py={2} textAlign='center'>
             ADD TO CART

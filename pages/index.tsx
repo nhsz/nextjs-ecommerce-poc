@@ -1,13 +1,15 @@
 import { Box, Divider, Flex, Grid, Heading, Image, Stack, Text, Wrap } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import { FC } from 'react';
+import { FC, useState } from 'react';
+import ReactPaginate from 'react-paginate';
 import api from '../api';
 import {
   CategoryFilter,
   FeaturedDescription,
   FeaturedDetails,
   FeaturedImage,
+  MobileFilters,
   PeopleAlsoBuy,
   PriceFilter,
   Product,
@@ -15,10 +17,11 @@ import {
   SortBy
 } from '../components';
 import { Fields, ProductData } from '../components/Product/types';
-import { AddToCartButton, PhotosHeading } from '../components/UI';
+import { BackgroundOverlay, PhotosHeading, PrimaryButton } from '../components/UI';
 import { useFilter } from '../hooks';
 import { useCartStore } from '../store';
 import { getProducts, removeDuplicatesFrom } from '../utils';
+import styles from './index.module.css';
 
 export const getStaticProps: GetStaticProps = async () => {
   const client = api.contentful.connect();
@@ -37,16 +40,35 @@ interface Products {
 }
 
 export const Home: FC<Products> = ({ products }): JSX.Element => {
-  const cartIsOpen = useCartStore(state => state.cartIsOpen);
+  const [cartIsOpen, setCartProducts, setCartIsOpen] = useCartStore(state => [
+    state.cartIsOpen,
+    state.setCartProducts,
+    state.setCartIsOpen
+  ]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [mobileFilters, setMobileFilters] = useState(false);
   const filteredProducts = useFilter(products);
   const totalProducts = filteredProducts.length;
   const featuredProduct = products.filter(product => product.featured)[0];
-  // if (!featuredProduct) featuredProduct = generateRandomFeatured(products);
 
+  // pagination
+  const LIMIT = 6;
+  const PAGE_COUNT = Math.ceil(products.length / LIMIT);
+  const INIT = currentPage * LIMIT - LIMIT;
+  const END = currentPage * LIMIT;
+  const handlePageChange = ({ selected }: { selected: number }) => {
+    setCurrentPage(selected + 1);
+  };
+
+  // Featured Product Info
   const { name, price, category, details } = featuredProduct;
   const { src, alt } = featuredProduct.image;
   const { height, width } = featuredProduct.details.dimensions;
   const { size } = featuredProduct.details;
+
+  // mobile filters
+  const handleClick = () => setMobileFilters(true);
+  const handleClose = () => setMobileFilters(false);
 
   return (
     <div>
@@ -56,6 +78,15 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
       </Head>
 
       <main>
+        {mobileFilters && (
+          <Stack display={{ base: 'block', md: 'none' }} position='relative' zIndex={999}>
+            <BackgroundOverlay />
+            <Stack w='100%' position='fixed' bottom={0} zIndex={999}>
+              <MobileFilters products={products} handleClose={handleClose} />
+            </Stack>
+          </Stack>
+        )}
+
         <Stack px={{ base: 0, md: 16 }} position='relative'>
           <Stack>
             <Divider border='none' height='4px' backgroundColor='#E4E4E4' />
@@ -80,7 +111,13 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
               {name}
             </Heading>
 
-            <AddToCartButton product={{ name, price, src, alt }} />
+            <PrimaryButton
+              text='ADD TO CART'
+              handleClick={() => {
+                setCartProducts({ name, price, src, alt });
+                setCartIsOpen(true);
+              }}
+            />
 
             <Stack mb={2} order={{ base: 1, md: 2 }} w='100%'>
               <FeaturedImage info={{ src, alt, height }} />
@@ -116,7 +153,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
           <Flex mt={6} direction='row' justifyContent='space-between' alignItems='center'>
             <PhotosHeading />
 
-            <Box display={{ base: 'block', md: 'none' }} cursor='pointer'>
+            <Box display={{ base: 'block', md: 'none' }} cursor='pointer' onClick={handleClick}>
               <Image src='/filters.svg' alt='Open filters' width={6} height={6} />
             </Box>
 
@@ -124,7 +161,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
           </Flex>
         </Stack>
 
-        <Stack px={{ base: 6, md: 16 }} mb={16}>
+        <Stack px={{ base: 6, md: 16 }} mb={10}>
           <Flex direction='row' justify='space-between'>
             <Stack display={{ base: 'none', md: 'block' }} mr={8}>
               <CategoryFilter
@@ -148,7 +185,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
                 gap={{ base: 10, md: 8 }}
                 mb={{ base: 6, md: 12 }}
               >
-                {filteredProducts.slice(0, 6).map(product => {
+                {filteredProducts.slice(INIT, END).map(product => {
                   return <Product key={product.id} product={product} />;
                 })}
               </Grid>
@@ -163,6 +200,23 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
             )}
           </Flex>
         </Stack>
+
+        <Flex justifyContent='center' mb={16}>
+          <ReactPaginate
+            previousLabel={'<'}
+            nextLabel={'>'}
+            initialPage={1}
+            pageCount={PAGE_COUNT}
+            onPageChange={handlePageChange}
+            pageRangeDisplayed={4}
+            marginPagesDisplayed={0}
+            containerClassName={styles.container}
+            previousLinkClassName={styles.previous}
+            nextLinkClassName={styles.next}
+            disabledClassName={styles.disabled}
+            activeClassName={styles.active}
+          />
+        </Flex>
       </main>
     </div>
   );

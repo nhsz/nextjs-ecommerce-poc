@@ -9,6 +9,8 @@ const Layout: FC = ({ children }) => {
     state.numberOfProducts
   ]);
 
+  const handleClick = () => setCartIsOpen(true);
+
   return (
     <Stack>
       <Stack
@@ -25,7 +27,7 @@ const Layout: FC = ({ children }) => {
               </a>
             </Link>
 
-            <Box cursor='pointer' onClick={() => setCartIsOpen(true)}>
+            <Box cursor='pointer' onClick={handleClick}>
               <Box position='relative'>
                 <Image src='/cart.svg' alt='Cart icon' width={'auto'} height={8} />
 
