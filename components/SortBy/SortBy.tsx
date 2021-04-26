@@ -1,11 +1,17 @@
 import { Box, Image, Text } from '@chakra-ui/react';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
+import { useSortStore } from '../../store';
 
 const SortBy: FC = () => {
+  const [setType, setOrder] = useSortStore(state => [state.setType, state.setOrder]);
+
+  const handleClick = () => setOrder();
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => setType(e.target.value);
+
   return (
     <Box display={{ base: 'none', md: 'block' }}>
       <span>
-        <Box display='inline'>
+        <Box display='inline' cursor='pointer' onClick={handleClick}>
           <Image
             display='inline-block'
             mr={2}
@@ -13,7 +19,6 @@ const SortBy: FC = () => {
             alt='Change sorting order'
             width={3}
             height={'auto'}
-            cursor='pointer'
           />
         </Box>
         <Text fontWeight='400' color='#9B9B9B' display='inline-block'>
@@ -21,9 +26,9 @@ const SortBy: FC = () => {
         </Text>
       </span>
 
-      <select>
-        <option value='0'>Alphabetically</option>
-        <option value='1'>Price</option>
+      <select onChange={handleChange}>
+        <option value='price'>Price</option>
+        <option value='alphabetically'>Alphabetically</option>
       </select>
     </Box>
   );

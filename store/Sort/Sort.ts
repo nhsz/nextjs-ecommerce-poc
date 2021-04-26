@@ -1,20 +1,18 @@
 import create from 'zustand';
 
-type Criteria = 'alphabetically' | 'price' | '';
-type Order = 'ascending' | 'ascending';
-
 type SortStore = {
-  type: Criteria;
-  order: Order;
-  setType: (type: Criteria) => void;
-  setOrder: (order: Order) => void;
+  type: string;
+  order: string;
+  setType: (type: string) => void;
+  setOrder: VoidFunction;
 };
 
 const useSortStore = create<SortStore>(set => ({
-  type: '',
+  type: 'price',
   order: 'ascending',
   setType: type => set(state => ({ ...state, type })),
-  setOrder: order => set(state => ({ ...state, order }))
+  setOrder: () =>
+    set(state => ({ ...state, order: state.order === 'ascending' ? 'descending' : 'ascending' }))
 }));
 
 export { useSortStore };
