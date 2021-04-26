@@ -1,14 +1,24 @@
 # NextJS e-commerce
 
-## Stack
+## Run the project
 
-- NextJS
-- TypeScript
-- ChakraUI
-- Contentful CMS
-- Assets: [Pexels](https://www.pexels.com/)
+```
+npm i
+npm start
+```
+
+## Stack used
+
+- **NextJS** + **TypeScript**
+- **Zustand** + hooks for state management
+- **ChakraUI** for components UI
+- **Contentful API** (CMS) for content delivery
+- Assets: the images are taken from [Pexels](https://www.pexels.com/)
+- `react-paginate` for pagination
 
 ## Schema
+
+This is the shape of an entry that comes from the Contentful collection.
 
 ```json
 {
@@ -33,4 +43,10 @@
 }
 ```
 
+## Comments
+
+Pagination is dynamic and only display when there's more than 1 page to show (6 products per page.)
+
 ## Demo
+
+See it [live](#)

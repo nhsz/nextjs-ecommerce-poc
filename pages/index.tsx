@@ -53,9 +53,9 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
 
   // pagination
   const LIMIT = 6;
-  const PAGE_COUNT = Math.ceil(products.length / LIMIT);
   const INIT = currentPage * LIMIT - LIMIT;
   const END = currentPage * LIMIT;
+  const PAGE_COUNT = Math.ceil(filteredProducts.length / LIMIT);
   const handlePageChange = ({ selected }: { selected: number }) => {
     setCurrentPage(selected + 1);
   };
@@ -189,6 +189,25 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
                   return <Product key={product.id} product={product} />;
                 })}
               </Grid>
+
+              {PAGE_COUNT > 1 && (
+                <Stack>
+                  <ReactPaginate
+                    previousLabel={'<'}
+                    nextLabel={'>'}
+                    initialPage={0}
+                    pageCount={PAGE_COUNT}
+                    onPageChange={handlePageChange}
+                    pageRangeDisplayed={4}
+                    marginPagesDisplayed={0}
+                    containerClassName={styles.container}
+                    previousLinkClassName={styles.previous}
+                    nextLinkClassName={styles.next}
+                    disabledClassName={styles.disabled}
+                    activeClassName={styles.active}
+                  />
+                </Stack>
+              )}
             </Stack>
 
             {totalProducts === 0 && (
@@ -200,23 +219,6 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
             )}
           </Flex>
         </Stack>
-
-        <Flex justifyContent='center' mb={16}>
-          <ReactPaginate
-            previousLabel={'<'}
-            nextLabel={'>'}
-            initialPage={1}
-            pageCount={PAGE_COUNT}
-            onPageChange={handlePageChange}
-            pageRangeDisplayed={4}
-            marginPagesDisplayed={0}
-            containerClassName={styles.container}
-            previousLinkClassName={styles.previous}
-            nextLinkClassName={styles.next}
-            disabledClassName={styles.disabled}
-            activeClassName={styles.active}
-          />
-        </Flex>
       </main>
     </div>
   );
