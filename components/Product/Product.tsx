@@ -16,7 +16,7 @@ const Product: FC<Props> = ({ product }) => {
   const { src, alt } = product.image;
 
   return (
-    <Box key={id}>
+    <Box key={id} mb={{ base: 6, md: 2 }}>
       <Box position='relative' height='400px' role='group' mb={1}>
         <Stack>
           <Image src={src} alt={alt} height='400px' width='auto' objectFit='cover' />
@@ -50,19 +50,18 @@ const Product: FC<Props> = ({ product }) => {
       </Box>
 
       <Stack>
-        <Stack mb={-2}>
-          <Text fontSize='md' fontWeight='700' color='#656565' mb={-2}>
-            {category}
-          </Text>
+        <Text fontSize='md' fontWeight='700' color='#656565' mb={-3}>
+          {category}
+        </Text>
 
-          <Text fontSize='2xl' fontWeight='700' mb={-2}>
+        <Stack justifyContent='space-between' h={'104px'}>
+          <Text fontSize='xl' fontWeight='700'>
             {name}
           </Text>
+          <Text fontSize='2xl' color='#656565'>
+            ${price}
+          </Text>
         </Stack>
-
-        <Text fontSize='2xl' color='#656565'>
-          ${price}
-        </Text>
       </Stack>
     </Box>
   );
