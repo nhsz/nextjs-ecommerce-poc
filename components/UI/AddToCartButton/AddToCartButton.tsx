@@ -8,8 +8,10 @@ interface Props {
 }
 
 const AddToCartButton: FC<Props> = ({ product }) => {
-  const setCartProducts = useCartStore(state => state.setCartProducts);
-  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
+  const [setCartProducts, setCartIsOpen] = useCartStore(state => [
+    state.setCartProducts,
+    state.setCartIsOpen
+  ]);
 
   return (
     <Stack

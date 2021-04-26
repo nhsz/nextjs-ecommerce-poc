@@ -1,4 +1,6 @@
 .squared {
-  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
-  -moz-appearance: checkbox; /* Firefox */
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -mozilla-appearance: none !important;
+  border-radius: 2px !important;
 }

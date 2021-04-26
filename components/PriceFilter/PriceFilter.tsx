@@ -1,13 +1,20 @@
 import { Heading, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import { FC } from 'react';
 import { useFiltersStore } from '../../store';
-// import styles from './PriceFilter.module.css';
+import styles from './PriceFilter.module.css';
 
 const PriceFilter: FC = () => {
   const [priceRange, setPriceRange] = useFiltersStore(state => [
     state.priceRange,
     state.setPriceRange
   ]);
+
+  const values = [
+    { range: '<20', text: 'Lower than $20' },
+    { range: '20-100', text: '$20 - $100' },
+    { range: '100-200', text: '$100 - $200' },
+    { range: '>200', text: 'More than $200' }
+  ];
 
   return (
     <Stack>
@@ -16,19 +23,23 @@ const PriceFilter: FC = () => {
       </Heading>
 
       <RadioGroup colorScheme='gray' onChange={setPriceRange} value={priceRange}>
-        <Stack>
-          <Radio variant='squared' value='<20'>
-            Lower than $20
-          </Radio>
-          <Radio variant='squared' value='20-100'>
-            $20 - $100
-          </Radio>
-          <Radio variant='squared' value='100-200'>
-            $100 - $200
-          </Radio>
-          <Radio variant='squared' value='>200'>
-            More than $200
-          </Radio>
+        <Stack className={styles.radio}>
+          {values.map(({ range, text }) => {
+            return (
+              <Radio
+                key={range}
+                className={styles.squared}
+                value={range}
+                color='green'
+                _checked={{
+                  color: '#fff !important',
+                  backgroundColor: '#718096'
+                }}
+              >
+                {text}
+              </Radio>
+            );
+          })}
         </Stack>
       </RadioGroup>
     </Stack>

@@ -2,7 +2,7 @@ import { ProductData } from '../components';
 import { useFiltersStore } from '../store';
 import { isInRange } from '../utils';
 
-const getFiltered = (products: ProductData[]): ProductData[] => {
+const useFilter = (products: ProductData[]): ProductData[] => {
   const filters = useFiltersStore(state => state.filters);
   const range = useFiltersStore(state => state.priceRange);
 
@@ -19,4 +19,4 @@ const getFiltered = (products: ProductData[]): ProductData[] => {
   );
 };
 
-export { getFiltered };
+export { useFilter };

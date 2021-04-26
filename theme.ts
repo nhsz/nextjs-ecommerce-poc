@@ -15,14 +15,6 @@ export default extendTheme({
           paddingX: 8
         }
       }
-    },
-    Radio: {
-      variants: {
-        squared: {
-          WebkitAppearance: 'checkbox',
-          MozAppearance: 'checkbox'
-        }
-      }
     }
   }
 });

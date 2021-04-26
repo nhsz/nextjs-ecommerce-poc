@@ -3,8 +3,7 @@ import { FC } from 'react';
 import { useCartStore } from '../../../store';
 
 const ClearCartButton: FC = () => {
-  const clearCart = useCartStore(state => state.clearCart);
-  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
+  const [clearCart, setCartIsOpen] = useCartStore(state => [state.clearCart, state.setCartIsOpen]);
 
   return (
     <Button

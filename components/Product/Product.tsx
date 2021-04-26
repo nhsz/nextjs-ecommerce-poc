@@ -8,8 +8,10 @@ interface Props {
 }
 
 const Product: FC<Props> = ({ product }) => {
-  const setCartProducts = useCartStore(state => state.setCartProducts);
-  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
+  const [setCartIsOpen, setCartProducts] = useCartStore(state => [
+    state.setCartIsOpen,
+    state.setCartProducts
+  ]);
   const { id, name, price, category, bestseller } = product;
   const { src, alt } = product.image;
 

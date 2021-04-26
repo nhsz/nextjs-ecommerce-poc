@@ -1,4 +1,4 @@
-import { Box, Divider, Flex, Grid, Heading, Image, Stack, Wrap } from '@chakra-ui/react';
+import { Box, Divider, Flex, Grid, Heading, Image, Stack, Text, Wrap } from '@chakra-ui/react';
 import { createClient } from 'contentful';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
@@ -40,9 +40,9 @@ interface Products {
 
 export const Home: FC<Products> = ({ products }): JSX.Element => {
   const cartIsOpen = useCartStore(state => state.cartIsOpen);
-
   const featuredProduct = products.filter(product => product.featured)[0];
   // if (!featuredProduct) featuredProduct = generateRandomFeatured(products);
+  const totalProducts = getFiltered(products).length;
 
   const { name, price, category, details } = featuredProduct;
   const { src, alt } = featuredProduct.image;
@@ -125,7 +125,7 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
           </Flex>
         </Stack>
 
-        <Stack px={{ base: 6, md: 16 }}>
+        <Stack px={{ base: 6, md: 16 }} mb={16}>
           <Flex direction='row' justify='space-between'>
             <Stack display={{ base: 'none', md: 'block' }} mr={8}>
               <CategoryFilter
@@ -156,6 +156,14 @@ export const Home: FC<Products> = ({ products }): JSX.Element => {
                   })}
               </Grid>
             </Stack>
+
+            {totalProducts === 0 && (
+              <Stack justifyContent='center' alignItems='center' w='100%' h={96}>
+                <Text color='gray.500' fontSize='xl' fontWeight={300}>
+                  There are no products that match your criteria.
+                </Text>
+              </Stack>
+            )}
           </Flex>
         </Stack>
       </main>

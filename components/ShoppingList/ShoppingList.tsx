@@ -12,9 +12,11 @@ export interface CartProduct {
 }
 
 const ShoppingList: FC = () => {
-  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
-  const cartProducts = useCartStore(state => state.cartProducts);
-  const totalAmount = useCartStore(state => state.totalAmount);
+  const [setCartIsOpen, cartProducts, totalAmount] = useCartStore(state => [
+    state.setCartIsOpen,
+    state.cartProducts,
+    state.totalAmount
+  ]);
 
   return (
     <Box

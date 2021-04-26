@@ -4,8 +4,10 @@ import { FC } from 'react';
 import { useCartStore } from '../../../store';
 
 const Layout: FC = ({ children }) => {
-  const setCartIsOpen = useCartStore(state => state.setCartIsOpen);
-  const numberOfProducts = useCartStore(state => state.numberOfProducts);
+  const [setCartIsOpen, numberOfProducts] = useCartStore(state => [
+    state.setCartIsOpen,
+    state.numberOfProducts
+  ]);
 
   return (
     <Stack>

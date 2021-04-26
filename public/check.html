@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)https://www.rapidtables.com/web/tools/svg-viewer-editor.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SVG viewer &amp; editor online</title>
+<meta content="SVG file viewer &amp; editor online." name="description">
+<style>
+	#bread
+	{
+		color:white;
+		margin:0;
+		padding:0;
+		vertical-align:bottom;
+	}
+	#bread a
+	{
+		color:#ddd;
+		text-decoration:none;
+		padding:20px 10px;
+	}
+	#bread a:hover
+	{
+		color:#fff;
+		background:#222;
+	}
+	.sdiv
+	{
+		display:inline-block;
+		vertical-align:top;
+		margin:0;
+		padding:0;
+	}
+	#link
+	{
+		margin:0;
+		padding:17px 20px 17px 20px;
+	}
+	@media all and (max-width: 576px) {
+		#share { display:none; }
+		#codeArea { width: 95%; width: calc(100% - 25px); }
+		#iview { width: 95%; width: calc(100% - 25px); }
+	}
+	@media all and (min-width: 577px) {
+		#share { padding:10px 0; }
+		#codeArea { width: 95%; width: calc(100% - 60px); }
+		#iview { width: 95%; width: calc(100% - 60px); }
+	}
+	table,th,td,tr { 
+		border-width: 0px;
+		border-collapse:collapse;
+		padding:0px;
+		margin:0 0 0 2%;
+		font-family:Arial, Helvetica, sans-serif;
+	}
+	button 		{ margin:0; height:40px; width:42px; }
+	button img	{ filter: invert(0.3); }
+	p { margin:0 0 0 2%; font-family:Arial, Helvetica, sans-serif }
+
+	html, body {
+	  height: 100%;
+	  width: 100%;
+	  margin: 0;
+	  padding: 0;
+	  overflow-x:hidden;
+	}
+	body {
+	  display: table;
+	  background:#f0f0f0;
+	}
+	header, #codeDiv, #viewDiv {
+	  display: table-row;
+	  width: 100%;
+	}
+	header {
+		background:#404040;
+		padding:0;
+	}
+	#codeDiv {
+	  height: 40%;
+	  margin:0;
+	}	
+	#viewDiv {
+	  height: 40%;
+	  margin:0;
+	}
+	#codeArea {
+	  height: 94%;
+	  margin: 0% 2%;
+	  padding:5px;
+	}
+	#iview {
+	  height: 88%;
+	  margin: 0% 2%;
+	  padding: 5px;
+	  background:white;
+	  border:1px #a9a9a9 solid;
+	}
+</style>
+</head>
+<body cz-shortcut-listen="true" style="zoom: 1;">
+<header>
+<div id="link" class="sdiv">
+<p id="bread"><a href="https://www.rapidtables.com/">Home</a>›<a href="https://www.rapidtables.com/web/index.html">Web</a>›<a href="https://www.rapidtables.com/web/tools/index.html">Tools</a>› SVG viewer/editor</p>
+</div>
+</header>
+<table>
+<tbody><tr>
+<td><button type="button" title="New" onclick="OnNew()"><img src="./check_files/glyphicons_036_file.png" alt="new"></button></td>
+<td><button type="button" title="Open SVG file" onclick="OnOpen()"><img src="./check_files/glyphicons_144_folder_open.png" alt="open"></button></td>
+
+<td><button type="button" title="View SVG code" onclick="OnDraw()"><img src="./check_files/glyphicons_027_search.png" alt="view"></button></td>
+<td><button type="button" title="Save SVG file" onclick="OnSave()"><img src="./check_files/glyphicons_414_disk_save.png" alt="save"></button></td>
+<td><input type="file" multiple="" id="fileElem" name="fileElem[]" accept="image/svg+xml" style="visibility:hidden; width:30px" onchange="loadFile()"></td>
+</tr>
+</tbody></table>
+<table>
+<tbody><tr id="getFilename" style="display:none">
+<td>Enter file name:</td>
+<td><input type="text" id="filename" placeholder="filename.svg" style="width:150px; padding:5px; margin-left:10px"></td>
+<td><input type="button" id="save" value="Save" onclick="saveFile()" style="padding:5px 10px 5px 10px; margin:0px"></td>
+<td><input type="button" id="cancel" value="Cancel" onclick="cancelSaveFile()" style="padding:5px; margin:0px"></td>
+</tr>
+</tbody></table>
+<p style="margin-top:10px">Code:</p>
+<div id="codeDiv">
+<textarea id="codeArea"></textarea>
+</div>
+<p>View:</p>
+<div id="viewDiv">
+<iframe id="iview" src="./check_files/saved_resource.html"></iframe>
+</div>
+<script src="./check_files/jquery.min.js"></script>
+<script src="./check_files/utils.js"></script>
+<script src="./check_files/Blob.js"></script>
+<script src="./check_files/FileSaver.js"></script>
+<script>
+	//window.onload = function()
+	$(document).ready( function() {
+		var s="<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"100\" version=\"1.1\">\n   <rect width=\"200\" height=\"100\" stroke=\"black\" stroke-width=\"6\" fill=\"green\"/>\n</svg>\n";
+		$("#codeArea").val(s);
+		
+		OnDraw();
+	});
+	function OnNew()
+	{
+		cancelSaveFile();
+		var s="<svg xmlns=\"http://www.w3.org/2000/svg\">\n\n</svg>";
+		$("#codeArea").val(s);
+		s = "<!DOCTYPE html><html><body></body></html>";
+		$("#iview").attr("srcdoc",s);
+	}
+	function OnOpen()
+	{
+		$("#fileElem").focus();
+		$("#fileElem").click();
+	}
+	function OnOpenURL()
+	{
+		//var s="<svg>\n\n</svg>";
+		//$("#codeArea").val(s);
+
+		img = document.createElement('img');
+		img.src = "http://dev.w3.org/SVG/tools/svgweb/samples/svg-files/acid.svg";
+		document.body.appendChild(img);
+		
+    	//var img = $("<img />", {src : $("#imageurl").val()});
+    	//img.appendTo("#iview");
+
+		$("#getURLname").css("display","inline");
+    }
+	function OnSave()
+	{
+		$("#getFilename").css("display","inline");
+	}
+	function OnDraw()
+	{
+		var s=$("#codeArea").val();
+		s = "<!DOCTYPE html><html><body>"+s+"</body></html>";
+		$("#iview").attr("srcdoc",s);
+	}
+	function loadFile()
+	{
+		var fileElem = document.getElementById("fileElem").files[0];
+      document.getElementById("fileElem").value="";
+		//var name = fileElem.name;
+		var reader = new FileReader();
+		
+	    reader.onloadend = function(evt) {
+	    	if( evt.target.readyState==FileReader.DONE ) {
+	    		//localStorage.notepad_filename = name;
+				//document.title = 'Notepad - '+name;
+	    		//area.value = evt.target.result;
+	    		s = evt.target.result;
+				OSName = GetOS();
+				if( OSName=="Windows" )
+		    		s = s.replace(/\r\n/g,'\n');
+	    		$("#codeArea").val(s);
+	    		OnDraw();
+				$("#codeArea").focus();
+      		}
+    	};
+		reader.readAsText(fileElem);
+	}
+	function cancelSaveFile()
+	{
+		$("#getFilename").css("display","none");
+	}
+	function saveFile()
+	{
+		//document.getElementById("getFilename").style.display = "none";
+		//var name = document.getElementById("filename").value;
+		$("#getFilename").css("display","none");
+		var name = $("#filename").val();
+		if( name=='' ) name="filename.svg";
+		//localStorage.svg_filename = name;
+		//document.title = "SVG - "+name;
+		
+		//var blob = new Blob([area.value], {type: "text/plain;charset=utf-8"});
+		//s = area.value;
+		var s=$("#codeArea").val();
+		OSName = GetOS();
+		if( OSName=="Windows" )
+			s = s.replace(/\n/g,'\r\n');
+		var blob = new Blob([s], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, name);
+	}
+</script>
+
+
+</body></html>
